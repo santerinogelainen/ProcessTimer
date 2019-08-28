@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.28803.352
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProcessTimer", "ProcessTimer\ProcessTimer.csproj", "{946C2EFB-E8F6-4C54-A0E7-879EFE18BCDE}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{946C2EFB-E8F6-4C54-A0E7-879EFE18BCDE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{946C2EFB-E8F6-4C54-A0E7-879EFE18BCDE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{946C2EFB-E8F6-4C54-A0E7-879EFE18BCDE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{946C2EFB-E8F6-4C54-A0E7-879EFE18BCDE}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {6E229D8A-E87B-491B-B832-239F16E74B3D}
+	EndGlobalSection
+EndGlobal

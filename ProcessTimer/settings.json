@@ -1,0 +1,8 @@
+{
+  "ExcludedProcesses": [
+    "WindowsInternal.ComposableShell.Experiences.TextInput.InputApp",
+    "ApplicationFrameHost",
+    "WinStore.App"
+  ],
+  "HistoryFolder":  "History"
+}

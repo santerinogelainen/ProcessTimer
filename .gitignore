@@ -1,0 +1,7 @@
+ProcessTimer/bin/**/*
+ProcessTimer/obj/**/*
+packages/**/*
+.vs/**/*
+ProcessTimer/FodyWeavers.xml
+ProcessTimer/FodyWeavers.xsd
+ProcessTimer/*.csproj.user

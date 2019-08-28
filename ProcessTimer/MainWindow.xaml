@@ -1,0 +1,23 @@
+﻿<Window x:Class="ProcessTimer.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:ProcessTimer"
+        mc:Ignorable="d"
+        Title="Todays processes" Height="450" Width="800">
+    <DataGrid AutoGenerateColumns="False" 
+          Height="auto"
+          Margin="10"
+          Width="auto"
+          IsReadOnly="True"
+          Name="ProcessGrid" >
+        <DataGrid.Columns>
+            <DataGridTextColumn Header="Process" Binding="{Binding Path=ProcessName}" Width="*" />
+            <DataGridTextColumn Header="Window" Binding="{Binding Path=WindowName}" Width="*" />
+            <DataGridTextColumn Header="Start time" Binding="{Binding Path=FormattedStartTime}" Width="*" />
+            <DataGridTextColumn Header="End time" Binding="{Binding Path=FormattedEndTime}" Width="*" />
+            <DataGridTextColumn Header="Uptime" Binding="{Binding Path=FormattedUptime}" Width="*" />
+        </DataGrid.Columns>
+    </DataGrid>
+</Window>
