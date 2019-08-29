@@ -6,18 +6,26 @@
         xmlns:local="clr-namespace:ProcessTimer"
         mc:Ignorable="d"
         Title="Todays processes" Height="450" Width="800">
-    <DataGrid AutoGenerateColumns="False" 
+    <DockPanel>
+        <ToolBarTray DockPanel.Dock="Top">
+            <ToolBar>
+                <Button Content="Refresh" Name="RefreshButton" />
+                <Button Content="Errors" Name="ErrorsButton" Visibility="Collapsed" />
+            </ToolBar>
+        </ToolBarTray>
+        <DataGrid AutoGenerateColumns="False" 
           Height="auto"
           Margin="10"
           Width="auto"
           IsReadOnly="True"
           Name="ProcessGrid" >
-        <DataGrid.Columns>
-            <DataGridTextColumn Header="Process" Binding="{Binding Path=ProcessName}" Width="*" />
-            <DataGridTextColumn Header="Window" Binding="{Binding Path=WindowName}" Width="*" />
-            <DataGridTextColumn Header="Start time" Binding="{Binding Path=FormattedStartTime}" Width="*" />
-            <DataGridTextColumn Header="End time" Binding="{Binding Path=FormattedEndTime}" Width="*" />
-            <DataGridTextColumn Header="Uptime" Binding="{Binding Path=FormattedUptime}" Width="*" />
-        </DataGrid.Columns>
-    </DataGrid>
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Process" Binding="{Binding Path=ProcessName}" Width="150" />
+                <DataGridTextColumn Header="Window" Binding="{Binding Path=WindowName}" Width="*" />
+                <DataGridTextColumn Header="Start time" Binding="{Binding Path=FormattedStartTime}" Width="40" />
+                <DataGridTextColumn Header="End time" Binding="{Binding Path=FormattedEndTime}" Width="40" />
+                <DataGridTextColumn Header="Uptime" Binding="{Binding Path=FormattedUptime}" Width="40" />
+            </DataGrid.Columns>
+        </DataGrid>
+    </DockPanel>
 </Window>

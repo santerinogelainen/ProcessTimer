@@ -17,6 +17,7 @@ namespace ProcessTimer
     {
 
         public const int TimerIntervalMinutes = 1;
+        public List<string> Errors { get; set; }
         public List<ProcessDetails> Details { get; set; }
         public Settings Settings { get; set; }
         public int ThisProcessId => Process.GetCurrentProcess()?.Id ?? 0;
@@ -39,6 +40,8 @@ namespace ProcessTimer
             };
 
             icon.DoubleClick += ShowWindow;
+            RefreshButton.Click += Loop;
+            ErrorsButton.Click += ShowErrors;
             StartLoop();
             Hide();
         }
@@ -54,6 +57,7 @@ namespace ProcessTimer
         protected void StartLoop()
         {
             Details = new List<ProcessDetails>();
+            Errors = new List<string>();
             Timer = new DispatcherTimer {
                 Interval = TimeSpan.FromMinutes(TimerIntervalMinutes)
             };
@@ -62,39 +66,53 @@ namespace ProcessTimer
             Loop(null, null); // do one loop
         }
 
-        protected void Loop(object sender, EventArgs e)
+        protected void Loop(object sender, EventArgs args)
         {
-            // get current open processes
-            IEnumerable<ProcessDetails> processes = Process
-                .GetProcesses()
-                .Where(x => 
-                    !string.IsNullOrEmpty(x.MainWindowTitle) && 
-                    !Settings.ExcludedProcesses.Contains(x.ProcessName) &&
-                    x.Id != ThisProcessId)
-                .Select(x => new ProcessDetails(x));
-
-            // end details that are not open anymore
-            IEnumerable<ProcessDetails> ended = Details
-                .Where(x => !x.EndTime.HasValue && !processes.Any(y => y.Id == x.Id));
-            foreach (var detail in ended) detail.EndTime = DateTime.Now;
-
-            // add new processes that have been started
-            IEnumerable<ProcessDetails> started = processes
-                .Where(x => !Details.Any(y => y.Id == x.Id));
-            Details.AddRange(started);
-
-            // replace file 
-            Directory.CreateDirectory("History");
-            List<string> lines = new List<string>
+            try
             {
-                ProcessDetails.CSVTitle
-            };
-            lines.AddRange(Details.Select(x => x.CSV));
-            File.WriteAllLines(Settings.HistoryFolder + "/" + DateTime.Now.ToString("yyyyMMdd") + "_" + ThisProcessId + ".csv", lines);
+                // get current open processes
+                IEnumerable<ProcessDetails> processes = Process
+                    .GetProcesses()
+                    .Where(x =>
+                        !string.IsNullOrEmpty(x.MainWindowTitle) &&
+                        !Settings.ExcludedProcesses.Contains(x.ProcessName) &&
+                        x.Id != ThisProcessId)
+                    .Select(x => new ProcessDetails(x));
 
-            // bind lists
-            ProcessGrid.ItemsSource = Details.OrderBy(x => x.StartTime);
-            ProcessGrid.Items.Refresh();
+                // end details that are not open anymore
+                IEnumerable<ProcessDetails> ended = Details
+                    .Where(x => !x.EndTime.HasValue && !processes.Any(y => y.Id == x.Id));
+                foreach (var detail in ended) detail.EndTime = DateTime.Now;
+
+                // add new processes that have been started
+                IEnumerable<ProcessDetails> started = processes
+                    .Where(x => !Details.Any(y => y.Id == x.Id && !y.EndTime.HasValue));
+                foreach (var detail in started)
+                {
+                    if (Details.Any(x => x.Id == detail.Id && x.EndTime.HasValue))
+                        detail.StartTime = DateTime.Now;
+                    Details.Add(detail);
+                }
+
+                // replace file 
+                Directory.CreateDirectory(Settings.HistoryFolder);
+                List<string> lines = new List<string>
+                {
+                    ProcessDetails.CSVTitle
+                };
+                lines.AddRange(Details.Select(x => x.CSV));
+                File.WriteAllLines(Settings.HistoryFolder + "/" + DateTime.Now.ToString("yyyyMMdd") + "_" + ThisProcessId + ".csv", lines);
+
+                // bind lists
+                ProcessGrid.ItemsSource = Details.OrderBy(x => x.StartTime);
+                ProcessGrid.Items.Refresh();
+            }
+            catch(Exception ex)
+            {
+                Errors.Add(ex.Message);
+                ErrorsButton.Content = "Errors (" + Errors.Count + ")";
+                ErrorsButton.Visibility = Visibility.Visible;
+            }
         }
 
         protected void EndLoop()
@@ -106,6 +124,11 @@ namespace ProcessTimer
         {
             Show();
             WindowState = WindowState.Normal;
+        }
+
+        protected void ShowErrors(object sender, EventArgs args)
+        {
+            System.Windows.MessageBox.Show(string.Join(Environment.NewLine + Environment.NewLine, Errors), "Errors (" + Errors.Count + ")", MessageBoxButton.OK);
         }
 
         protected override void OnStateChanged(EventArgs e)
@@ -126,6 +149,5 @@ namespace ProcessTimer
 
             base.OnClosing(e);
         }
-
     }
 }

@@ -12,10 +12,10 @@ namespace ProcessTimer
 
         public const string CSVTitle = "Process;Window;Start time;End time;Uptime";
 
-        public int Id => Process.Id;
-        public string WindowName => Process.MainWindowTitle;
-        public string ProcessName => Process.ProcessName;
-        public DateTime StartTime => Process.StartTime;
+        public int Id { get; set; }
+        public string WindowName { get; set; }
+        public string ProcessName { get; set; }
+        public DateTime StartTime { get; set; }
         public DateTime? EndTime { get; set; }
         public TimeSpan Uptime => ((EndTime ?? DateTime.Now) - StartTime);
 
@@ -36,7 +36,16 @@ namespace ProcessTimer
 
         public ProcessDetails(Process process)
         {
+            Fill(process);
+        }
+
+        public void Fill(Process process)
+        {
             Process = process;
+            Id = process.Id;
+            StartTime = process.StartTime;
+            WindowName = process.MainWindowTitle;
+            ProcessName = process.ProcessName;
         }
 
     }
